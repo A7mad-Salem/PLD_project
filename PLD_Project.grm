@@ -1,0 +1,86 @@
+"Name"     = 'PLD_project'
+"Author"   = 'Ahmad_salem'
+!-----------------------------------------
+"Start Symbol" = <Program>
+
+! Terminals
+Id=[_]|{letter}{alphanumeric}*
+Number={Digit}   
+
+! -------------------------------------------------
+                      ! Rules
+
+! new line rules
+<nl>      ::= NewLine <nl>    !one or more
+           |  NewLine
+           
+<nl Opt>  ::= NewLine <nl Opt>  !!zero or more
+           | !Empty       
+! -------------------------------------------------
+
+! The grammar starts below
+<Program> ::=<nl opt><stmt_list>
+  
+<stmt_list> ::= <stmt><stmt_list>
+             |<stmt>      
+             
+<stmt>  ::=<assign>
+         |<if_stmt>
+         |<for_stmt>
+         |<while_stmt>
+         |<do-while_stmt>
+         |<switch_stmt> 
+         |<print_stmt>  
+
+<assign> ::= <id>'='<expr>
+         
+<id> ::= Id
+      
+<expr> ::= <expr>'+'<term>
+        | <expr>'-'<term>
+        | <term>
+        
+<term> ::=<term>'*'<factor>
+        |<term>'/'<factor>
+        |<factor>
+        
+<factor> ::=<factor>'**'<exp>
+          |<exp>
+
+<exp> ::=<id>|'"'<id>'"'
+       |Number
+       |<exp><id>
+
+
+!-----------------IF stetement----------------------   
+<if_stmt> ::=if <cond>':'<stmt_list>
+           |if <cond>':'<stmt_list> else<stmt_list>
+    
+<cond> ::=<expr><opr><expr>
+        |'TRUE'
+        |'FALSE'
+        
+<opr>::='>'|'=='|'<'|'!='|'<='|'>='   
+      
+!----------------for statement----------------------
+<for_stmt>   ::= for <id> in <expr>':'<stmt_list>
+              
+!----------------While statement------------------
+<while_stmt>::=while <expr>':' <stmt_list>
+            
+!---------------do while stmt---------------------
+<do-while_stmt>::= do'('<stmt_list>')'while<cond>
+                
+!------------------switch statement-----------------
+<switch_stmt>::=switch <expr>':'<nl><stmt_list>
+              
+<switch_cases>::=<switch_case> <expr>
+               |<switch_case> <nl> <switch_cases>
+               
+<switch_case>::=case<expr>':'<nl><stmt_list>
+              |<default>
+              
+<default>::=Default
+!--------------print statement--------------
+<print_stmt>::=print'('<expr>')'|'(''"'<expr>'"'')'
+
